@@ -1,0 +1,145 @@
+
+<script>
+var workspaces = ["CS", "Shopping"];
+
+function add_button(){
+    if (workspaces.length < 4){
+    workspaces[workspaces.length] = "New";
+    document.getElementById('wrapper').innerHTML += '<button onclick="change()"><div><h3>' + 'New Workspace' + '</h3></div></button>';
+    }
+
+}
+
+var userAction = async () => {
+
+    var key = '3d6ce81e-081e-4b72-91c5-22775a3bcf59';
+  var response = await fetch('https://platform.uipath.com/api/account/authenticate', {
+    method: 'POST',
+      body: JSON.stringify({
+                 tenancyName : "jerryjiao0",
+                 usernameOrEmailAddress : "jerrylemingjiao@gmail.com",
+                 password : "62979964jerry", // string or object
+      }),
+    headers:{
+      'Content-Type': 'application/json'
+    }
+  });
+  var myJson = await response.json(); //extract JSON from the http response
+  // do something with myJson
+    console.log(myJson.result);
+    var authenticateKey = "Bearer " + myJson.result;
+
+    var jobResponse = await fetch('https://platform.uipath.com/odata/Jobs/UiPath.Server.Configuration.OData.StartJobs', {
+    method: 'POST',
+
+        body: JSON.stringify({
+                 startInfo: {
+                    ReleaseKey: key,
+                    RobotIds: [],
+                     Strategy: "All",
+                     InputArguments: ""
+                 }
+            }),
+                // string or object
+    headers:{
+    'Authorization': authenticateKey,
+      'Content-Type': 'application/json'
+    }
+  });
+  var myJsonJob = await jobResponse.json(); //extract JSON from the http response
+  // do something with myJson
+}
+
+</script>
+
+<body>
+
+    <div id="h1wrapper"><h1 id="title">qwork</h1></div>
+   <!-- {% for workspace in workspaces: %}-->
+    <div id="wrapper">
+        <button id="new" onclick="userAction(); add_button();">
+            <h3>Add New</h3>
+        </button>
+    </div>
+    <!--{% endfor %}-->
+
+
+</body>
+<script>
+        var add = "";
+        for (var x = 0; x < workspaces.length; x++){
+            add += '<button onclick="change()"><div><h3>' + workspaces[x] + '</h3></div></button>';
+        }
+
+        document.getElementById("wrapper").innerHTML += add;
+
+</script>
+
+<style>
+
+  body {
+      background-image: url('https://i.imgur.com/SvnuN4M.png');
+      background-size: 1500px auto;
+      padding: 5vw;
+  }
+
+  h1 {
+      font-family: "Sail", "Open Sans", "Helvetica";
+      font-size: 80px;
+  	  color: white;
+      text-align: center;
+      z-index: 1
+
+  }
+
+
+  #h1wrapper{
+      margin-top: 0.5vh;
+      text-align: center;
+      padding-bottom: 1px;
+      padding-top: 20px;
+      background-color: #4492ff;
+
+      opacity: 0.5;
+      border-radius: 5px;
+      z-index: -1;
+  }
+
+  button {
+  	font-size: 15px;
+    font-family: "Roboto";
+  	color: #0548bc;
+  	background-color: #98c8f2;
+    width: 100%;
+    margin-top: 5px;
+  	padding: 14px 18px;
+    border: none;
+  	/*border: 2px solid #0c3887;*/
+  	border-radius: 15px;
+
+  	display: inline-block;
+  	transition: all 0.3s;
+  	--webkit-transition: all 0.2s;
+  }
+
+
+
+    #new {
+        background-color: white;
+        opacity: 0.5;
+    }
+
+    #new:hover {
+        opacity: 0.8;
+    }
+
+  button:hover {
+  	background-color: white;
+  	/*color: #dbe8ff;*/
+  }
+
+
+
+</style>
+
+</html>
